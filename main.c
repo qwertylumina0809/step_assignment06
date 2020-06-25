@@ -222,20 +222,23 @@ void* my_malloc(size_t size) {
   simple_metadata_t* prev = NULL;
   int det = 1;
   size_t difference;
-  // First-fit: Find the first free slot the object fits.
+  //Best-fit(if the best option does not exist, find the smallest size)
   while (metadata) {
+    // If the best option exist
     if(metadata->size == size){
       void* ptr = metadata + 1
       simple_remove_from_free_list(metadata,prev);
       return ptr;
     }
   else if(metadata->size > size){
+    // record the first data
     if(det==1){
       difference = metadata->size -size;
       temp_prev = prev;
       temp = metadata;
       det = 0;
     else{
+    //compare with the previous smallest one
       if(metadata->size - size < difference){
         temp_prev = prev;
         temp = metadata;
